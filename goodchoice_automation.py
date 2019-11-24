@@ -14,8 +14,7 @@ class Init_APP(unittest.TestCase):
 
     def setUp(self):
         # setup file path
-        app = os.path.join(os.path.dirname(__file__), 'D:\\Test_Appium\\KakaogameSDK',
-                           'KakaoGameSDK_Test_App_3.8.0.1.apk')
+        app = os.path.join(os.path.dirname(__file__), 'C:\\apk\\goodchoice.apk')
         app = os.path.abspath(app)
 
         # Set up appium
@@ -24,7 +23,7 @@ class Init_APP(unittest.TestCase):
             desired_capabilities={
                 'platformName': 'Android',
                 'platformVersion': '9.0',
-                'deviceName': 'Nexus 6',
+                'deviceName': 'Nexus_6',
                 'automationName': 'Appium',
                 'appPackage': 'kr.goodchoice.abouthere',
                 'appActivity': 'kr.goodchoice.abouthere.activity.SplashActivity'
@@ -59,43 +58,48 @@ class Init_APP(unittest.TestCase):
     def test_motel(self):
         self.test_install()
 
-        driver              = self.driver
-        wait                = WebDriverWait(driver, 20)
+        driver = self.driver
+        wait = WebDriverWait(driver, 20)
 
         # Select motel Btn
-        motel_Btn           = WebDriverWait(driver, 20).until(
+        motel_Btn = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.ID, "kr.goodchoice.abouthere:id/relat_item3")))
         motel_Btn.click()
-        wait                = WebDriverWait(driver, 20)
+
+    def test_motel_scroll(self):
+        self.test_motel()
+
+        driver = self.driver
+        wait = WebDriverWait(driver, 20)
 
         # area scrolling up & down
-        for i in range (0,2):
+        for i in range(0, 2):
             sleep(3)
-            action          = TouchAction(self.driver)
+            action = TouchAction(self.driver)
 
-            header_view     = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_group_")
-            start_btn       = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='0']")
-            end_btn         = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='8']")
+            header_view = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_group_")
+            start_btn = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='0']")
+            end_btn = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='8']")
 
-            if(i == 0):
-                self.driver.scroll(end_btn, start_btn)
-            else:
-                self.driver.scroll(start_btn, end_btn)
+        if (i == 0):
+            self.driver.scroll(end_btn, start_btn)
+        else:
+            self.driver.scroll(start_btn, end_btn)
 
         # area_detail scrolling up & down
-        for i in range (0,2):
+        for i in range(0, 2):
             sleep(3)
-            action          = TouchAction(self.driver)
-            header_view     = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_child_")
-            start_btn       = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='0']")
-            end_btn         = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='8']")
+            action = TouchAction(self.driver)
+            header_view = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_child_")
+            start_btn = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='0']")
+            end_btn = header_view.find_element_by_xpath("//android.widget.FrameLayout[@index='8']")
 
             if (i == 0):
                 self.driver.scroll(end_btn, start_btn)
             else:
                 self.driver.scroll(start_btn, end_btn)
 
-    def test_detail(self):
+    def test_mt_detail(self):
         self.test_motel()
 
         driver              = self.driver
@@ -109,44 +113,49 @@ class Init_APP(unittest.TestCase):
         header_detail       = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_child_")
         area_detail         = header_detail.find_element_by_xpath("//android.widget.FrameLayout[@index='1']").click()
 
-        #for i in range (0,4):
-        #    sleep(1)
-        #    action          = TouchAction(self.driver)
+    def test_mt_detailscroll(self):
 
-            # 숙소 scrolling
-        #    start_btn       = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='2']")
-        #    end_btn         = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='1']")
+    def test_mt_detailfilter(self):
+        self.test_detail()
 
-        #    self.driver.scroll(start_btn, end_btn)
+        driver = self.driver
+        wait = WebDriverWait(driver, 20)
 
-        # 필터링
-        discount_btn        = WebDriverWait(driver, 5).until(
+        # discount filtering on
+        discount_btn = WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable((By.XPATH, "//android.widget.TextView[@text='할인숙소']")))
         discount_btn.click()
 
-        sleep(5)
+        sleep(3)
+        # discount filtering off
         discount_btn.click()
 
-        #sleep(5)
+        # payback filtering on
+        payback_btn = WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH,"//android.widget.TextView[@text='페이백']")))
+        payback_btn.click()
 
-        #payback_btn         = driver.find_element_by_xpath("//android.widget.TextView[@text='페이백']")
-        #payback_btn.click()
+        sleep(3)
+        # payback filtering off
+        payback_btn.click()
 
-        #sleep(5)
-        #payback_btn.click()
+        # rent filtering on
+        rent_btn =  WebDriverWait(driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH,"//android.widget.TextView[@text='대실예약']")))
+        rent_btn.click()
 
-        #sleep(5)
-        #rent_btn            = driver.find_element_by_xpath("//android.widget.TextView[@text='대실예약']")
-        #rent_btn.click()
+        sleep(3)
+        # rent filtering off
+        rent_btn.click()
 
-        #sleep(5)
-        #rent_btn.click()
+        # lodgment filtering on
+        lodgment_btn =  WebDriverWait(driver, 5).until(
+             EC.element_to_be_clickable((By.XPATH,"//android.widget.TextView[@text='숙박예약']")))
 
-        #sleep(5)
-        #lodgment_brn        = driver.find_element_by_xpath("//android.widget.TextView[@text='숙박예약']")
-        #lodgment_brn.click()
+        sleep(3)
+        # lodgment filtering off
+        lodgment_btn.click()
 
-        sleep(4)
 if __name__ == '__main__':
     suite_1 = unittest.TestLoader().loadTestsFromTestCase(Init_APP)
     unittest.TextTestRunner(verbosity=2).run(suite_1)
