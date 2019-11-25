@@ -32,6 +32,25 @@ class Init_APP(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+    # scrolling the display
+    def test_scroll(self):
+        driver = self.driver
+        wait = WebDriverWait(driver, 20)
+
+        start_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='1']")
+        end_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='2']")
+
+        # scrolling lodgment down
+        for count in range(0,5):
+            self.driver.scroll(end_btn, start_btn)
+            sleep(1)
+
+        # scrolling lodgment up
+        for count in range(0,5):
+            self.driver.scroll(start_btn, end_btn)
+            sleep(1)
+
+    # instatll_APK
     def test_install(self):
         driver              = self.driver
         wait                = WebDriverWait(driver, 20)
@@ -55,6 +74,7 @@ class Init_APP(unittest.TestCase):
             EC.element_to_be_clickable((By.ID, "kr.goodchoice.abouthere:id/later_")))
         later_Btn.click()
 
+    # Access Motel
     def test_motel(self):
         self.test_install()
 
@@ -66,6 +86,7 @@ class Init_APP(unittest.TestCase):
             EC.element_to_be_clickable((By.ID, "kr.goodchoice.abouthere:id/relat_item3")))
         motel_Btn.click()
 
+    #Motel Scrolling
     def test_motel_scroll(self):
         self.test_motel()
 
@@ -105,6 +126,8 @@ class Init_APP(unittest.TestCase):
         driver              = self.driver
         wait                = WebDriverWait(driver, 20)
 
+        sleep(3)
+
         # 지역
         header_area         = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_group_")
         area                = header_area.find_element_by_xpath("//android.widget.FrameLayout[@index='1']").click()
@@ -113,9 +136,29 @@ class Init_APP(unittest.TestCase):
         header_detail       = driver.find_element_by_id("kr.goodchoice.abouthere:id/recycler_view_child_")
         area_detail         = header_detail.find_element_by_xpath("//android.widget.FrameLayout[@index='1']").click()
 
-    def test_mt_detailscroll(self):
+        sleep(3)
+        # 숙박상세 접근
+        lodgment_list        = driver.find_element_by_id("container_")
+        lodgment             = lodgment_list.find_element_by_xpath("//android.widget.LinearLayout[@index='1']").click()
 
-    def test_mt_detailfilter(self):
+        sleep(3)
+
+        try:
+            driver.find_element_by_id("com_appboy_inappmessage_modal").is_displayed()
+
+            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "com_appboy_inappmessage_modal_button_dual_one"))).click()
+        except:
+            sleep(3)
+
+            for i in range(0, 2):
+                scroll_st_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='1']")
+                scroll__end_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='3']")
+
+                sleep(2)
+                
+                self.driver.scroll(scroll__end_btn, scroll_st_btn)
+
+    def test_mt_detail_filter(self):
         self.test_detail()
 
         driver = self.driver
