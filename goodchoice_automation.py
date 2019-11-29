@@ -4,6 +4,7 @@ import unittest
 import os
 from appium import webdriver
 from time import sleep
+import Scroll_Func
 
 from appium.webdriver.common.touch_action import TouchAction
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,7 +12,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 class Init_APP(unittest.TestCase):
-
     def setUp(self):
         # setup file path
         app = os.path.join(os.path.dirname(__file__), 'C:\\apk\\goodchoice.apk')
@@ -33,22 +33,42 @@ class Init_APP(unittest.TestCase):
         self.driver.quit()
 
     # scrolling the display
-    def test_scroll(self):
-        driver = self.driver
-        wait = WebDriverWait(driver, 20)
+    def scrollUp(self):
 
-        start_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='1']")
-        end_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='2']")
+        handle_one_size = self.driver.get_window_size()
 
-        # scrolling lodgment down
-        for count in range(0,5):
-            self.driver.scroll(end_btn, start_btn)
-            sleep(1)
+        # width calculator
+        width = handle_one_size["width"]
+        width_temp = int(width / 2)
 
-        # scrolling lodgment up
-        for count in range(0,5):
-            self.driver.scroll(start_btn, end_btn)
-            sleep(1)
+        scroll_width = int(width_temp + (width_temp / 2))
+
+        # height calculator
+        height = handle_one_size["height"]
+        scroll_temp = int(height / 10)
+
+        scroll_w_str = int(height - scroll_temp * 8)
+        scroll_w_end = int(height - scroll_temp * 5)
+
+        self.driver.swipe(scroll_width, scroll_w_str, scroll_width, scroll_w_end)
+
+    def scrollDown(self):
+        handle_one_size = self.driver.get_window_size()
+
+        # width calculator
+        width = handle_one_size["width"]
+        width_temp = int(width / 2)
+
+        scroll_width = int(width_temp + (width_temp / 2))
+
+        # height calculator
+        height = handle_one_size["height"]
+        scroll_temp = int(height / 10)
+
+        scroll_w_str = int(height - scroll_temp * 8)
+        scroll_w_end = int(height - scroll_temp * 5)
+
+        self.driver.swipe(scroll_width, scroll_w_end, scroll_width, scroll_w_str)
 
     # instatll_APK
     def test_install(self):
@@ -146,17 +166,19 @@ class Init_APP(unittest.TestCase):
         try:
             driver.find_element_by_id("com_appboy_inappmessage_modal").is_displayed()
 
-            WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "com_appboy_inappmessage_modal_button_dual_one"))).click()
-        except:
+            WebDriverWait(driver, 10).until(
+                EC.presence_of_element_located((By.ID, "com_appboy_inappmessage_modal_close_button"))).click()
+
+        finally:
             sleep(3)
 
-            for i in range(0, 2):
-                scroll_st_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='1']")
-                scroll__end_btn = driver.find_element_by_xpath("//android.widget.LinearLayout[@index='3']")
+            for i in range(0,2):
+                self.scrollDown()
+                sleep(3)
 
-                sleep(2)
-                
-                self.driver.scroll(scroll__end_btn, scroll_st_btn)
+            for i in range(0,2):
+                self.scrollUp()
+                sleep(3)
 
     def test_mt_detail_filter(self):
         self.test_detail()
